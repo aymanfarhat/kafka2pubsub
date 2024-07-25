@@ -44,6 +44,17 @@ mvn compile exec:java \
         --sslEndpointIdentificationAlgorithm=" # Optional: e.g. https"
 ```
 
-### Build on Google Cloud Build
+### Building the container image
 
-TBD
+In order for the Dataflow Runner to work, we need to build the container image copy in the secrets related to the truststore and keystore files and push it to Google Container Registry. Below is an example of how to build the container image:
+
+```bash
+# Fetch the trustsore and keystore files from Google Cloud Storage
+gsutil cp gs://[BUCKET_NAME]/[TRUSTSTORE_FILE] ./secrets/truststore.jks
+gsutil cp gs://[BUCKET_NAME]/[KEYSTORE_FILE] ./secrets/keystore.jks
+
+# Build the container image and push it to Google Container Registry
+gcloud builds submit --tag [REGION]-docker.pkg.dev/[PROJECT_ID]/[REPO_NAME]/[IMAGE_NAME] .
+```
+
+The above steps can as well be automated via a Cloud Build pipeline and a trigger.
