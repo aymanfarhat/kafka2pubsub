@@ -15,6 +15,8 @@ graph TD
     C --> D[Publish messages to a Pubsub topic]
 ```
 
+Note: When running on Google Cloud Dataflow, the truststore and keystore files need to be present on a /secrets directory in the worker VMs. The files are copied into the docker image at build time. We are working on improving this process to fetch these files at runtime from Google Secret Manager.
+
 ## How to run
 ### Local development (via Direct Runner)
 
