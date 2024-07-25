@@ -13,8 +13,6 @@ graph TD
     A[Start] --> B[Get truststore and keystore passwords from Google Secret Manager]
     B --> C[Read messages from a Kafka topic]
     C --> D[Publish messages to a Pubsub topic]
-    D --> E[Use the Direct Runner for local development and the Dataflow Runner for production deployment]
-    E --> F[End]
 ```
 
 ## How to run
