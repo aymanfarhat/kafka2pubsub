@@ -26,10 +26,16 @@
 
   <properties>
     <beam.version>2.57.0</beam.version>
-    <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
     <maven-exec-plugin.version>1.6.0</maven-exec-plugin.version>
     <slf4j.version>1.7.25</slf4j.version>
     <auto-service.version>1.1.1</auto-service.version>
+    <!-- Maven plugin versions -->
+    <maven-jar-plugin.version>3.2.0</maven-jar-plugin.version>
+    <maven-enforcer-plugin.version>3.4.1</maven-enforcer-plugin.version>
+    <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
+    <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
+    <maven-exec-plugin.version>3.1.1</maven-exec-plugin.version>
+
   </properties>
 
   <repositories>
@@ -57,10 +63,6 @@
           <target>1.8</target>
         </configuration>
       </plugin>
-    </plugins>
-
-    <pluginManagement>
-      <plugins>
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>exec-maven-plugin</artifactId>
@@ -69,8 +71,78 @@
             <cleanupDaemonThreads>false</cleanupDaemonThreads>
           </configuration>
         </plugin>
+         <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-maven</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireMavenVersion>
+                  <version>3.0.5</version>
+                </requireMavenVersion>
+              </rules>
+              <minimizeJar>true</minimizeJar>
+              <filters>
+                  <filter>
+                      <artifact>*:*</artifact>
+                      <excludes>
+                          <exclude>META-INF/*.SF</exclude>
+                          <exclude>META-INF/*.DSA</exclude>
+                          <exclude>META-INF/*.RSA</exclude>
+                      </excludes>
+                  </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-compiler-plugin.version}</version>
+      </plugin>
+
+      <!-- The maven shade plugin is used to create an uber-jar with all the
+        dependencies needed to run as a standalone jar.
+        Do not minimize the jar since that removes some of the required classes for the runners. -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-shade-plugin</artifactId>
+          <version>${maven-shade-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>package</phase>
+              <goals>
+                <goal>shade</goal>
+              </goals>
+              <configuration>
+                <transformers>
+                  <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                    <mainClass>org.apache.beam.samples.MainPipeline</mainClass>
+                  </transformer>
+                </transformers>
+                 <minimizeJar>true</minimizeJar>
+                  <filters>
+                      <filter>
+                          <artifact>*:*</artifact>
+                          <excludes>
+                              <exclude>META-INF/*.SF</exclude>
+                              <exclude>META-INF/*.DSA</exclude>
+                              <exclude>META-INF/*.RSA</exclude>
+                          </excludes>
+                      </filter>
+                  </filters>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
       </plugins>
-    </pluginManagement>
   </build>
   <dependencyManagement>
     <dependencies>

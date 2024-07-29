@@ -1,0 +1,69 @@
+{
+    "name": "kafka2pubsub",
+    "description": "Kafka to Pub/Sub",
+    "parameters": [
+        {
+            "name": "kafkaBootstrapServers",
+            "label": "Kafka Bootstrap Servers",
+            "helpText": "Kafka bootstrap servers",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "kafkaTopic",
+            "label": "Kafka Topic",
+            "helpText": "Kafka topic",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "pubsubTopic",
+            "label": "Pub/Sub Topic",
+            "helpText": "Pub/Sub topic",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "sslTruststoreLocation",
+            "label": "SSL Truststore Location",
+            "helpText": "SSL truststore location",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "sslTruststorePassSecretId",
+            "label": "SSL Truststore Password Secret ID",
+            "helpText": "Secret ID for SSL truststore password",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "sslKeystoreLocation",
+            "label": "SSL Keystore Location",
+            "helpText": "SSL keystore location",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "sslKeystorePassSecretId",
+            "label": "SSL Keystore Password Secret ID",
+            "helpText": "Secret ID for SSL keystore password",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "secretManagerProjectId",
+            "label": "Secret Manager Project ID",
+            "helpText": "Secret Manager project ID",
+            "type": "STRING",
+            "isOptional": false
+        },
+        {
+            "name": "sslEndpointIdentificationAlgorithm",
+            "label": "SSL Endpoint Identification Algorithm",
+            "helpText": "SSL endpoint identification algorithm",
+            "type": "STRING",
+            "isOptional": true
+        }
+    ]
+}

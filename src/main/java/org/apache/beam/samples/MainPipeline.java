@@ -85,8 +85,7 @@ public class MainPipeline {
 
   public static void main(String[] args) {
     StreamPipelineOptions options = PipelineOptionsFactory
-    .fromArgs(args).withValidation()
-    .as(StreamPipelineOptions.class);
+    .fromArgs(args).as(StreamPipelineOptions.class);
 
     runKafka2Pubsub(options);
   }
