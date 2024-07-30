@@ -58,3 +58,32 @@ gcloud builds submit --tag [REGION]-docker.pkg.dev/[PROJECT_ID]/[REPO_NAME]/[IMA
 ```
 
 The above steps can as well be automated via a Cloud Build pipeline and a trigger.
+
+### Launching from Uber Jar
+
+First step is to build the Uber Jar:
+
+```bash
+mvn clean package
+```
+
+Then, launch the Dataflow job:
+
+```bash
+java -cp target/kafka2pubsub-1.0-SNAPSHOT.jar  \
+    org.apache.beam.samples.MainPipeline \
+    --runner=DataflowRunner \
+    --project=[PROJECT_ID] \
+    --gcpTempLocation=gs://[BUCKET]/tmp/ \
+    --stagingLocation=gs://[BUCKET]/staging/ \
+    --region=[REGION] \
+    --kafkaBootstrapServers="[KAFKA_BOOTSTRAP_SERVER]" \
+    --kafkaTopic=[KAFKA_TOPIC] \
+    --pubsubTopic="[PUBSUB_TOPIC]" \
+    --sslTruststoreLocation="/secrets/client.truststore.jks" \
+    --sslTruststorePassSecretId="[TRUSTSTORE_PASS_SECRET_ID]" \
+    --sslKeystoreLocation="/secrets/server.keystore.jks" \
+    --sslKeystorePassSecretId="[KEYSTORE_PASS_SECRET_ID]" \
+    --secretManagerProjectId="[PROJECT_ID]" \
+    --sslEndpointIdentificationAlgorithm=""
+```
