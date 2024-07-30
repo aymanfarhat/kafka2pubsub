@@ -87,7 +87,7 @@ public class MainPipeline {
     StreamPipelineOptions options = PipelineOptionsFactory
     .fromArgs(args).as(StreamPipelineOptions.class);
 
-    options.setSdkContainerImage(options.getSdkContainerImage());
+    options.setSdkContainerImage("europe-west1-docker.pkg.dev/workflows-demo-369108/kafka2pubsub/df:latest");
     options.setExperiments(ImmutableList.of(
       "use_runner_v2",
       "disable_conscrypt_security_provider" 

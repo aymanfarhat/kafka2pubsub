@@ -73,4 +73,5 @@ public interface StreamPipelineOptions extends DataflowPipelineOptions {
     String getSslEndpointIdentificationAlgorithm();
 
     void setSslEndpointIdentificationAlgorithm(String value);
+
 }
