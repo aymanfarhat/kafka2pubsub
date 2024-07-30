@@ -85,5 +85,6 @@ java -cp target/kafka2pubsub-1.0-SNAPSHOT.jar  \
     --sslKeystoreLocation="/secrets/server.keystore.jks" \
     --sslKeystorePassSecretId="[KEYSTORE_PASS_SECRET_ID]" \
     --secretManagerProjectId="[PROJECT_ID]" \
-    --sslEndpointIdentificationAlgorithm=""
+    --sslEndpointIdentificationAlgorithm="" \
+    --sdkContainerImage="[REGION]-docker.pkg.dev/[PROJECT_ID]/[REPO_NAME]/[IMAGE_NAME]"
 ```
