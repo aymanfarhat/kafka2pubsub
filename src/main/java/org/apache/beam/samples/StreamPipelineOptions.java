@@ -16,11 +16,10 @@
 package org.apache.beam.samples;
 import org.apache.beam.sdk.options.Validation;
 import org.apache.beam.sdk.options.Description;
-import org.apache.beam.sdk.options.PipelineOptions;
+import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
 
 
-
-public interface StreamPipelineOptions extends PipelineOptions {
+public interface StreamPipelineOptions extends DataflowPipelineOptions {
     @Description("Kafka topic to read from")
     @Validation.Required
     String getKafkaTopic();

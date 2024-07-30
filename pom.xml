@@ -35,7 +35,7 @@
     <maven-compiler-plugin.version>3.12.1</maven-compiler-plugin.version>
     <maven-shade-plugin.version>3.5.1</maven-shade-plugin.version>
     <maven-exec-plugin.version>3.1.1</maven-exec-plugin.version>
-
+    <conscrypt.version>2.5.2</conscrypt.version>
   </properties>
 
   <repositories>
@@ -54,6 +54,23 @@
 
   <build>
    <plugins>
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+        <!--<execution>
+                <id>copy-dependencies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <includeArtifactIds>conscrypt-openjdk-uber</includeArtifactIds>
+                  <stripVersion>true</stripVersion>
+                </configuration>
+            </execution> -->
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -88,7 +105,7 @@
                 </requireMavenVersion>
               </rules>
               <minimizeJar>true</minimizeJar>
-              <filters>
+              <!--<filters>
                   <filter>
                       <artifact>*:*</artifact>
                       <excludes>
@@ -97,7 +114,7 @@
                           <exclude>META-INF/*.RSA</exclude>
                       </excludes>
                   </filter>
-              </filters>
+              </filters> -->
             </configuration>
           </execution>
         </executions>
@@ -122,12 +139,28 @@
                 <goal>shade</goal>
               </goals>
               <configuration>
+
+                <extraDirectories>
+                    <paths>
+                        <path>${project.build.directory}/extra_libs</path>
+                    </paths>
+                </extraDirectories>
+                <createDependencyReducedPom>false</createDependencyReducedPom>
+                <artifactSet>
+                    <excludes>
+                        <exclude>org.conscrypt:conscrypt-openjdk-uber</exclude>
+                    </excludes>
+                     <includes>
+                        <include>*:*</include>
+                      </includes>
+                </artifactSet>
+
                 <transformers>
                   <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                    <mainClass>org.apache.beam.samples.MainPipeline</mainClass>
                   </transformer>
+                  <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                 </transformers>
-                 <minimizeJar>true</minimizeJar>
+
                   <filters>
                       <filter>
                           <artifact>*:*</artifact>
@@ -144,18 +177,7 @@
         </plugin>
       </plugins>
   </build>
-  <dependencyManagement>
     <dependencies>
-      <dependency>
-        <groupId>org.apache.beam</groupId>
-        <artifactId>beam-sdks-java-google-cloud-platform-bom</artifactId>
-        <version>${beam.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-  <dependencies>
     <dependency>
       <groupId>org.apache.beam</groupId>
       <artifactId>beam-sdks-java-core</artifactId>
@@ -165,18 +187,10 @@
       <groupId>org.apache.beam</groupId>
       <artifactId>beam-runners-google-cloud-dataflow-java</artifactId>
       <version>${beam.version}</version>
-      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.beam</groupId>
       <artifactId>beam-runners-direct-java</artifactId>
-      <version>${beam.version}</version>
-      <scope>runtime</scope>
-    </dependency>
-    <!-- portable runner -->
-    <dependency>
-      <groupId>org.apache.beam</groupId>
-      <artifactId>beam-runners-portability-java</artifactId>
       <version>${beam.version}</version>
       <scope>runtime</scope>
     </dependency>
@@ -188,6 +202,12 @@
     <dependency>
       <groupId>org.apache.beam</groupId>
       <artifactId>beam-sdks-java-io-google-cloud-platform</artifactId>
+      <version>${beam.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.beam</groupId>
+      <artifactId>beam-sdks-java-extensions-google-cloud-platform-core</artifactId>
+      <version>${beam.version}</version>
     </dependency>
     <dependency>
       <groupId>org.apache.kafka</groupId>
@@ -197,12 +217,12 @@
     <dependency>
       <groupId>com.google.cloud</groupId>
       <artifactId>google-cloud-secretmanager</artifactId>
+      <version>2.46.0</version>
     </dependency>
-
     <dependency>
-            <groupId>com.google.auto.service</groupId>
-            <artifactId>auto-service-annotations</artifactId>
-            <version>${auto-service.version}</version>
+        <groupId>com.google.auto.service</groupId>
+        <artifactId>auto-service-annotations</artifactId>
+        <version>${auto-service.version}</version>
     </dependency>
     <!-- slf4j API frontend binding with JUL backend -->
     <dependency>
@@ -214,6 +234,11 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-jdk14</artifactId>
       <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.conscrypt</groupId>
+      <artifactId>conscrypt-openjdk-uber</artifactId>
+      <version>2.5.2</version>
     </dependency>
   </dependencies>
 </project>
