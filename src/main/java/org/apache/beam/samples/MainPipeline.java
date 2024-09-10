@@ -34,6 +34,7 @@ import org.apache.beam.sdk.coders.NullableCoder;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubIO;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessage;
 import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessageWithAttributesCoder;
+import com.google.cloud.secretmanager.v1.SecretManagerServiceClient;
 
 
 public class MainPipeline {
@@ -42,14 +43,17 @@ public class MainPipeline {
     // Initialize the Kafka SSL properties on the worker
     new KafkaSslInitializer().beforeProcessing(options);
 
+    SecretManagerServiceClient secretsClient = SecretManagerHelper.DefaultSecretManagerServiceClientHolder.INSTANCE;
+    SecretManagerHelper secretManagerHelper = new SecretManagerHelper(secretsClient, options.getSecretManagerProjectId());
+
     Pipeline p = Pipeline.create(options);
 
     Map<String, Object> consumerConfig = ImmutableMap.of(
       "security.protocol", "SSL",
       "ssl.truststore.location", options.getSslTruststoreLocation(),
-      "ssl.truststore.password", options.getSslTruststorePassSecretId(),
+      "ssl.truststore.password", secretManagerHelper.downloadSecretDataToString(options.getSslTruststorePassSecretId()),
       "ssl.keystore.location", options.getSslKeystoreLocation(),
-      "ssl.keystore.password", options.getSslKeystorePassSecretId(),
+      "ssl.keystore.password", secretManagerHelper.downloadSecretDataToString(options.getSslKeystorePassSecretId()),
       "ssl.endpoint.identification.algorithm", options.getSslEndpointIdentificationAlgorithm()
     );
 

@@ -46,4 +46,9 @@ public class SecretManagerHelper {
       throw new RuntimeException(e);
     }
   }
+
+  public String downloadSecretDataToString(String secretName) {
+    ByteString secretData = fetchSecretData(secretName);
+    return secretData.toStringUtf8();
+  }
 }
