@@ -17,9 +17,10 @@ package org.apache.beam.samples;
 import org.apache.beam.sdk.options.Validation;
 import org.apache.beam.sdk.options.Description;
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
+import org.apache.beam.sdk.options.PipelineOptions;
 
 
-public interface StreamPipelineOptions extends DataflowPipelineOptions {
+public interface StreamPipelineOptions extends DataflowPipelineOptions, PipelineOptions {
     @Description("Kafka topic to read from")
     @Validation.Required
     String getKafkaTopic();
@@ -38,6 +39,12 @@ public interface StreamPipelineOptions extends DataflowPipelineOptions {
 
     void setKafkaBootstrapServers(String value);
 
+    @Description("SSL Truststore file secret Id")
+    @Validation.Required
+    String getSslTruststoreFileSecretId();
+
+    void setSslTruststoreFileSecretId(String value);
+
     @Description("SSL Truststore location on the local worker")
     @Validation.Required
     String getSslTruststoreLocation();
@@ -49,6 +56,12 @@ public interface StreamPipelineOptions extends DataflowPipelineOptions {
     String getSslTruststorePassSecretId();
 
     void setSslTruststorePassSecretId(String value);
+
+    @Description("SSL Keystore file secret Id")
+    @Validation.Required
+    String getSslKeystoreFileSecretId();
+
+    void setSslKeystoreFileSecretId(String value);
 
     @Description("SSL Keystore location on the local worker")
     @Validation.Required

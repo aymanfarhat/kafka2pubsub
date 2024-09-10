@@ -15,7 +15,6 @@
 **/
 package org.apache.beam.samples;
 
-import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.LoggerFactory;
@@ -25,6 +24,7 @@ import org.apache.beam.sdk.values.KV;
 import java.nio.charset.StandardCharsets;
 import org.apache.beam.sdk.Pipeline;
 import org.apache.beam.sdk.options.PipelineOptionsFactory;
+import org.apache.beam.sdk.options.PipelineOptions;
 import org.apache.beam.sdk.transforms.DoFn;
 import org.apache.beam.sdk.transforms.ParDo;
 import org.apache.beam.sdk.io.kafka.KafkaIO;
@@ -39,22 +39,22 @@ import org.apache.beam.sdk.io.gcp.pubsub.PubsubMessageWithAttributesCoder;
 public class MainPipeline {
   private static final Logger LOG = LoggerFactory.getLogger(MainPipeline.class);
   static void runKafka2Pubsub(StreamPipelineOptions options) {
+    // Initialize the Kafka SSL properties on the worker
+    new KafkaSslInitializer().beforeProcessing(options);
+
     Pipeline p = Pipeline.create(options);
-  
+
     Map<String, Object> consumerConfig = ImmutableMap.of(
       "security.protocol", "SSL",
       "ssl.truststore.location", options.getSslTruststoreLocation(),
-      //"ssl.truststore.password", SecretManagerUtils.getSecret(options.getSecretManagerProjectId(), options.getSslTruststorePassSecretId(), "latest"),
       "ssl.truststore.password", options.getSslTruststorePassSecretId(),
       "ssl.keystore.location", options.getSslKeystoreLocation(),
-      //"ssl.keystore.password", SecretManagerUtils.getSecret(options.getSecretManagerProjectId(), options.getSslKeystorePassSecretId(), "latest"),
       "ssl.keystore.password", options.getSslKeystorePassSecretId(),
       "ssl.endpoint.identification.algorithm", options.getSslEndpointIdentificationAlgorithm()
     );
 
     p.apply("Read from Kafka", KafkaIO.<String, String>read()
         .withBootstrapServers(options.getKafkaBootstrapServers())
-        //.withConsumerFactoryFn(new SslConsumerFactoryFn(consumerConfig))
         .withConsumerConfigUpdates(consumerConfig)
         .withTopic(options.getKafkaTopic())
         .withKeyDeserializerAndCoder(
@@ -84,15 +84,9 @@ public class MainPipeline {
   }
 
   public static void main(String[] args) {
-    StreamPipelineOptions options = PipelineOptionsFactory
+    StreamPipelineOptions streamOptions = PipelineOptionsFactory
     .fromArgs(args).as(StreamPipelineOptions.class);
 
-    options.setSdkContainerImage("europe-west1-docker.pkg.dev/workflows-demo-369108/kafka2pubsub/df:latest");
-    options.setExperiments(ImmutableList.of(
-      "use_runner_v2",
-      "disable_conscrypt_security_provider" 
-    ));
-
-    runKafka2Pubsub(options);
+    runKafka2Pubsub(streamOptions);
   }
 }
