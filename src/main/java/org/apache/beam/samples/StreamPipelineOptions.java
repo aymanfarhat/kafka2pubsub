@@ -1,90 +1,86 @@
 /**
-* Copyright 2024 Google LLC
-
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-
-* https://www.apache.org/licenses/LICENSE-2.0
-
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-**/
+ * Copyright 2024 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file
+ * except in compliance with the License. You may obtain a copy of the License at
+ *
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software distributed under the
+ * License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
+ * express or implied. See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package org.apache.beam.samples;
-import org.apache.beam.sdk.options.Validation;
-import org.apache.beam.sdk.options.Description;
+
 import org.apache.beam.runners.dataflow.options.DataflowPipelineOptions;
-import org.apache.beam.sdk.options.PipelineOptions;
+import org.apache.beam.sdk.options.Description;
+import org.apache.beam.sdk.options.Validation;
 
+public interface StreamPipelineOptions extends DataflowPipelineOptions {
+  @Description("Kafka topic to read from")
+  @Validation.Required
+  String getKafkaTopic();
 
-public interface StreamPipelineOptions extends DataflowPipelineOptions, PipelineOptions {
-    @Description("Kafka topic to read from")
-    @Validation.Required
-    String getKafkaTopic();
+  void setKafkaTopic(String value);
 
-    void setKafkaTopic(String value);
+  @Description("PubSub topic to publish to")
+  @Validation.Required
+  String getPubsubTopic();
 
-    @Description("PubSub topic to publish to")
-    @Validation.Required
-    String getPubsubTopic();
+  void setPubsubTopic(String value);
 
-    void setPubsubTopic(String value);
+  @Description("Kafka bootstrap servers")
+  @Validation.Required
+  String getKafkaBootstrapServers();
 
-    @Description("Kafka bootstrap servers")
-    @Validation.Required
-    String getKafkaBootstrapServers();
+  void setKafkaBootstrapServers(String value);
 
-    void setKafkaBootstrapServers(String value);
+  @Description("SSL Truststore file secret Id")
+  @Validation.Required
+  String getSslTruststoreFileSecretId();
 
-    @Description("SSL Truststore file secret Id")
-    @Validation.Required
-    String getSslTruststoreFileSecretId();
+  void setSslTruststoreFileSecretId(String value);
 
-    void setSslTruststoreFileSecretId(String value);
+  @Description("SSL Truststore location on the local worker")
+  @Validation.Required
+  String getSslTruststoreLocation();
 
-    @Description("SSL Truststore location on the local worker")
-    @Validation.Required
-    String getSslTruststoreLocation();
+  void setSslTruststoreLocation(String value);
 
-    void setSslTruststoreLocation(String value);
+  @Description("SSL Truststore password secret Id")
+  @Validation.Required
+  String getSslTruststorePassSecretId();
 
-    @Description("SSL Truststore password secret Id")
-    @Validation.Required
-    String getSslTruststorePassSecretId();
+  void setSslTruststorePassSecretId(String value);
 
-    void setSslTruststorePassSecretId(String value);
+  @Description("SSL Keystore file secret Id")
+  @Validation.Required
+  String getSslKeystoreFileSecretId();
 
-    @Description("SSL Keystore file secret Id")
-    @Validation.Required
-    String getSslKeystoreFileSecretId();
+  void setSslKeystoreFileSecretId(String value);
 
-    void setSslKeystoreFileSecretId(String value);
+  @Description("SSL Keystore location on the local worker")
+  @Validation.Required
+  String getSslKeystoreLocation();
 
-    @Description("SSL Keystore location on the local worker")
-    @Validation.Required
-    String getSslKeystoreLocation();
+  void setSslKeystoreLocation(String value);
 
-    void setSslKeystoreLocation(String value);
+  @Description("SSL Keystore password secret Id")
+  @Validation.Required
+  String getSslKeystorePassSecretId();
 
-    @Description("SSL Keystore password secret Id")
-    @Validation.Required
-    String getSslKeystorePassSecretId();
+  void setSslKeystorePassSecretId(String value);
 
-    void setSslKeystorePassSecretId(String value);
+  @Description("GCP project ID for the secrets store")
+  @Validation.Required
+  String getSecretManagerProjectId();
 
-    @Description("GCP project ID for the secrets store")
-    @Validation.Required
-    String getSecretManagerProjectId();
+  void setSecretManagerProjectId(String value);
 
-    void setSecretManagerProjectId(String value);
+  @Description("SSL endpoint identification algorithm for Kafka")
+  @Validation.Required
+  String getSslEndpointIdentificationAlgorithm();
 
-    @Description("SSL endpoint identification algorithm for Kafka")
-    @Validation.Required
-    String getSslEndpointIdentificationAlgorithm();
-
-    void setSslEndpointIdentificationAlgorithm(String value);
-
+  void setSslEndpointIdentificationAlgorithm(String value);
 }

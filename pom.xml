@@ -57,19 +57,6 @@
      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-        <!--<execution>
-                <id>copy-dependencies</id>
-                <phase>package</phase>
-                <goals>
-                  <goal>copy-dependencies</goal>
-                </goals>
-                <configuration>
-                  <includeArtifactIds>conscrypt-openjdk-uber</includeArtifactIds>
-                  <stripVersion>true</stripVersion>
-                </configuration>
-            </execution> -->
-        </executions>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -105,16 +92,6 @@
                 </requireMavenVersion>
               </rules>
               <minimizeJar>true</minimizeJar>
-              <!--<filters>
-                  <filter>
-                      <artifact>*:*</artifact>
-                      <excludes>
-                          <exclude>META-INF/*.SF</exclude>
-                          <exclude>META-INF/*.DSA</exclude>
-                          <exclude>META-INF/*.RSA</exclude>
-                      </excludes>
-                  </filter>
-              </filters> -->
             </configuration>
           </execution>
         </executions>
@@ -148,7 +125,6 @@
                 <goal>shade</goal>
               </goals>
               <configuration>
-
                 <extraDirectories>
                     <paths>
                         <path>${project.build.directory}/extra_libs</path>
@@ -169,7 +145,6 @@
                   </transformer>
                   <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                 </transformers>
-
                   <filters>
                       <filter>
                           <artifact>*:*</artifact>
